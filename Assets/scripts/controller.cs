@@ -11,7 +11,13 @@ public class controller : MonoBehaviour
     public const int SIZE = 36;
     Button[] buttons;
     Image[] image; 
-    Image img;
+    Sprite img;
+    Image ObjectwithImage;
+    public Sprite spriteToChangeItTo;
+    public Sprite spr1;
+    public Sprite spr2;
+    public Sprite spr3;
+    int ryad;
 
     // Start is called before the first frame update
     void Start()
@@ -21,10 +27,36 @@ public class controller : MonoBehaviour
 
     public void Click()
     {
+        int COUNT = 5;
         string name = EventSystem.current.currentSelectedGameObject.name;
         int i = GetNumber(name);
         Debug.Log(i + " clicked");
-        Debug.Log("Image Name: " + img.name);
+        ObjectwithImage = GameObject.Find(name).GetComponent<Image>();
+        ryad = (i-1)/6 + 1;
+        if (ObjectwithImage.sprite == spr2)
+        {
+            for (int j = 0; j < i-1; j++)
+            {
+                COUNT++;
+            }
+            ObjectwithImage.sprite = spriteToChangeItTo;
+            if  (i % 2 != 0)
+                {
+                for (int j = 0; j < 3; j++)
+                {
+                    ObjectwithImage = GameObject.Find($"GEX ({i + COUNT + j})").GetComponent<Image>();
+                    ObjectwithImage.sprite = spr2;
+                }
+            }
+            else 
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    ObjectwithImage = GameObject.Find($"GEX ({i + COUNT + j})").GetComponent<Image>();
+                    ObjectwithImage.sprite = spr2;
+                }
+            }
+        } Debug.Log(ryad);
     }
     private void InitButtons()
     {
