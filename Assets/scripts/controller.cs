@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class controller : MonoBehaviour
 {
-    public const int SIZE = 36;
+    public const int SIZE = 18;
     Button[] buttons;
     Image[] image; 
     Sprite img;
@@ -17,7 +17,11 @@ public class controller : MonoBehaviour
     public Sprite spr1;
     public Sprite spr2;
     public Sprite spr3;
-    int ryad;
+    public int Speed;
+    private int value;
+    Text CPS;
+    Text Coins;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,36 +31,52 @@ public class controller : MonoBehaviour
 
     public void Click()
     {
-        int COUNT = 5;
         string name = EventSystem.current.currentSelectedGameObject.name;
         int i = GetNumber(name);
-        Debug.Log(i + " clicked");
+        CPSplus(i, name);
+        ifClicked(i,name);
+        CoinsMinus(i, name);
+    }
+    private void ifClicked(int i, string name)
+    {
+
+        int COUNT = 5;
+        //Debug.Log(i + " clicked");
         ObjectwithImage = GameObject.Find(name).GetComponent<Image>();
-        ryad = (i-1)/6 + 1;
         if (ObjectwithImage.sprite == spr2)
         {
-            for (int j = 0; j < i-1; j++)
+            for (int j = 0; j < i - 1; j++)
             {
                 COUNT++;
             }
             ObjectwithImage.sprite = spriteToChangeItTo;
-            if  (i % 2 != 0)
-                {
-                for (int j = 0; j < 3; j++)
-                {
-                    ObjectwithImage = GameObject.Find($"GEX ({i + COUNT + j})").GetComponent<Image>();
-                    ObjectwithImage.sprite = spr2;
-                }
-            }
-            else 
+            for (int j = 0; j < 3; j++)
             {
-                for (int j = 0; j < 2; j++)
+                if ((i + COUNT + j) <= SIZE) {
+                ObjectwithImage = GameObject.Find($"GEX ({i + COUNT + j})").GetComponent<Image>();
+                if (ObjectwithImage.sprite != spr1)
                 {
-                    ObjectwithImage = GameObject.Find($"GEX ({i + COUNT + j})").GetComponent<Image>();
                     ObjectwithImage.sprite = spr2;
                 }
+                }
             }
-        } Debug.Log(ryad);
+        }
+    }
+    private void CoinsMinus(int i, string name)
+    {
+
+    }
+    private void CPSplus(int i, string name)
+    {
+        ObjectwithImage = GameObject.Find(name).GetComponent<Image>();
+        if (ObjectwithImage.sprite == spr2)
+        {
+            Debug.Log(i);
+            CPS = GameObject.Find("CPS").GetComponent<Text>();
+            value = Convert.ToInt32(GameObject.Find("Text"+i).GetComponent<Text>());
+            CPS.text = "Coins per second " + Convert.ToString(value);
+        }
+
     }
     private void InitButtons()
     {
