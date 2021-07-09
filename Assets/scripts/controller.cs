@@ -28,6 +28,7 @@ public class controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        restart();
         InitButtons();
         StartCoroutine(Count());
     }
@@ -47,11 +48,13 @@ public class controller : MonoBehaviour
         string name = EventSystem.current.currentSelectedGameObject.name;
         int i = GetNumber(name);
         Coins = GameObject.Find($"GEX ({i})").GetComponentInChildren<Text>();
-        if (Convert.ToInt32(Coins.text) <= count)
+        ObjectwithImage = GameObject.Find(name).GetComponent<Image>();
+        if ((ObjectwithImage.sprite == spr2) && (Convert.ToInt32(Coins.text) <= count))
         {
             CoinsMinus(i, name);
             ifClicked(i, name);
             CPSplus(i, name);
+
         }
     }
     private void ifClicked(int i, string name)
@@ -112,7 +115,7 @@ public class controller : MonoBehaviour
             for (int j = 0; j < 2; j++)
             {
                 int prices = Random.Range(10, 30);
-                if ((i - 1) >= SIZE)
+                if ((i - 1) <= SIZE)
                 {
                     CPS = GameObject.Find($"GEX ({i - 1})").GetComponentInChildren<Text>();
                     ObjectwithImage = GameObject.Find($"GEX ({i - 1})").GetComponent<Image>();
@@ -176,5 +179,27 @@ public class controller : MonoBehaviour
         Group group = match.Groups[1];
         string number = group.Value;
         return Convert.ToInt32(number);
+    }
+    public void restart()
+    {
+        value = 1;
+        count = 0;
+        CPS = GameObject.Find("CPS").GetComponent<Text>();
+        CPS.text = "Coins per second: " + Convert.ToString(value);
+        for (int i = 1; i < 7; i++)
+        {
+            ObjectwithImage = GameObject.Find($"GEX ({i})").GetComponent<Image>();
+            Coins = GameObject.Find($"GEX ({i})").GetComponentInChildren<Text>();
+            ObjectwithImage.sprite = spr2;
+            Coins.text = Convert.ToString(20);
+            Coins.color = new Color(202, 255, 0);
+        }
+        for (int i = 7; i < 19; i++)
+        {
+            ObjectwithImage = GameObject.Find($"GEX ({i})").GetComponent<Image>();
+            Coins = GameObject.Find($"GEX ({i})").GetComponentInChildren<Text>();
+            ObjectwithImage.sprite = spr3;
+            Coins.text = Convert.ToString("");
+        }
     }
 }
