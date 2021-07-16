@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 public class controller : MonoBehaviour
 {
     public const int SIZE = 18;
-    Button[] buttons;
+    Text[] buttons;
     Image[] image;
     Sprite img;
     Image ObjectwithImage;
@@ -35,7 +35,6 @@ public class controller : MonoBehaviour
 
     public IEnumerator Count()
     {
-        int x = 0;
         while (count < 10000)
         {
             count = count + value;
@@ -47,9 +46,8 @@ public class controller : MonoBehaviour
     {
         string name = EventSystem.current.currentSelectedGameObject.name;
         int i = GetNumber(name);
-        Coins = GameObject.Find($"GEX ({i})").GetComponentInChildren<Text>();
         ObjectwithImage = GameObject.Find(name).GetComponent<Image>();
-        if ((ObjectwithImage.sprite == spr2) && (Convert.ToInt32(Coins.text) <= count))
+        if ((ObjectwithImage.sprite == spr2) && (Convert.ToInt32(buttons[i].text) <= count))
         {
             CoinsMinus(i, name);
             ifClicked(i, name);
@@ -73,13 +71,11 @@ public class controller : MonoBehaviour
             if (i == 1 || i == 17)
             {
                 int prices = Random.Range(10, 30);
-                CPS = GameObject.Find($"GEX ({SIZE})").GetComponentInChildren<Text>();
-                ObjectwithImage = GameObject.Find($"GEX ({SIZE})").GetComponent<Image>();
-                if (ObjectwithImage.sprite != spr1)
+                if (image[SIZE].sprite != spr1)
                 {
-                    ObjectwithImage.sprite = spr2;
-                    CPS.text = Convert.ToString(prices);
-                    CPS.color = new Color(202, 255, 0);
+                    image[SIZE].sprite = spr2;
+                    buttons[SIZE].text = Convert.ToString(prices);
+                    buttons[SIZE].color = new Color(202, 255, 0);
                 }
             }
             for (int j = 0; j < 3; j++)
@@ -87,13 +83,11 @@ public class controller : MonoBehaviour
                 int prices = Random.Range(10, 30);
                 if ((i + COUNT + j) <= SIZE)
                 {
-                    CPS = GameObject.Find($"GEX ({i + COUNT + j})").GetComponentInChildren<Text>();
-                    ObjectwithImage = GameObject.Find($"GEX ({i + COUNT + j})").GetComponent<Image>();
-                    if (ObjectwithImage.sprite != spr1)
+                    if (image[i + COUNT + j].sprite != spr1)
                     {
-                        ObjectwithImage.sprite = spr2;
-                        CPS.text = Convert.ToString(prices);
-                        CPS.color = new Color(202, 255, 0);
+                        image[i + COUNT + j].sprite = spr2;
+                        buttons[i+COUNT+j].text = Convert.ToString(prices);
+                        buttons[i+COUNT+j].color = new Color(202, 255, 0);
                     }
                 }
             }
@@ -102,13 +96,11 @@ public class controller : MonoBehaviour
                 int prices = Random.Range(10, 30);
                 if ((i + 1) <= SIZE && i != 6)
                 {
-                    CPS = GameObject.Find($"GEX ({i + 1})").GetComponentInChildren<Text>();
-                    ObjectwithImage = GameObject.Find($"GEX ({i + 1})").GetComponent<Image>();
-                    if (ObjectwithImage.sprite != spr1)
+                    if (image[i+1].sprite != spr1)
                     {
-                        ObjectwithImage.sprite = spr2;
-                        CPS.text = Convert.ToString(prices);
-                        CPS.color = new Color(202, 255, 0);
+                        image[i+1].sprite = spr2;
+                        buttons[i+1].text = Convert.ToString(prices);
+                        buttons[i+1].color = new Color(202, 255, 0);
                     }
                 }
             }
@@ -117,13 +109,11 @@ public class controller : MonoBehaviour
                 int prices = Random.Range(10, 30);
                 if ((i - 1) <= SIZE)
                 {
-                    CPS = GameObject.Find($"GEX ({i - 1})").GetComponentInChildren<Text>();
-                    ObjectwithImage = GameObject.Find($"GEX ({i - 1})").GetComponent<Image>();
-                    if (ObjectwithImage.sprite != spr1)
+                    if (image[i-1].sprite != spr1)
                     {
-                        ObjectwithImage.sprite = spr2;
-                        CPS.text = Convert.ToString(prices);
-                        CPS.color = new Color(202, 255, 0);
+                        image[i-1].sprite = spr2;
+                        buttons[i-1].text = Convert.ToString(prices);
+                        buttons[i-1].color = new Color(202, 255, 0);
                     }
                 }
             }
@@ -138,12 +128,12 @@ public class controller : MonoBehaviour
             {
                // Debug.Log(i);
                 CPS = GameObject.Find("Coins").GetComponent<Text>();
-                Coins = GameObject.Find($"GEX ({i})").GetComponentInChildren<Text>();
-                count = count - Convert.ToInt32(Coins.text);
+                //Coins = GameObject.Find($"GEX ({i})").GetComponentInChildren<Text>();
+                count = count - Convert.ToInt32(buttons[i].text);
                 CPS.text = "Coins: " + Convert.ToString(count);
                 int prices = Random.Range(1, 5);
-                Coins.text = Convert.ToString(prices);
-                Coins.color = new Color(0, 0, 0);
+                buttons[i].text = Convert.ToString(prices);
+                buttons[i].color = new Color(0, 0, 0);
 
             }
 
@@ -157,18 +147,23 @@ public class controller : MonoBehaviour
             //Debug.Log(i);
             CPS = GameObject.Find("CPS").GetComponent<Text>();
             //Debug.Log(CPS);
-            Coins = GameObject.Find($"GEX ({i})").GetComponentInChildren<Text>();
-            value = value + Convert.ToInt32(Coins.text);
+            value = value + Convert.ToInt32(buttons[i].text);
             CPS.text = "Coins per second: " + Convert.ToString(value);
         }
 
     }
     private void InitButtons()
     {
-        buttons = new Button[SIZE];
-        for (int i = 1; i < SIZE; i++)
-            buttons[i] = 
-                GameObject.Find($"GEX ({i})").GetComponent<Button>();
+        buttons = new Text[SIZE+1];
+        image = new Image[SIZE+1];
+        for (int i = 0; i <= SIZE; i++)
+        {
+            image[i] =
+                GameObject.Find($"GEX ({i})").GetComponent<Image>();
+            buttons[i] =
+                    GameObject.Find($"GEX ({i})").GetComponentInChildren<Text>();
+        }
+
     }
     private int GetNumber(string name)
     {
